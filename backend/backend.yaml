@@ -14,18 +14,18 @@ spec:
     spec:
       containers:
       - name: backend
-        image: yourdockerhub/ashu-backend
+        image: dasariashvitha/restaurant-backend:latest
         ports:
         - containerPort: 5000
         env:
         - name: DB_HOST
-          value: "your-rds-endpoint"
+          value: "mydb.cduquwyokvwf.ap-south-1.rds.amazonaws.com"
         - name: DB_USER
           value: "admin"
         - name: DB_PASSWORD
-          value: "password123"
+          value: "Ashvitha123"
         - name: DB_NAME
-          value: "ashu_db"
+          value: "restaurant"
 ---
 apiVersion: v1
 kind: Service

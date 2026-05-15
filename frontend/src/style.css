@@ -1,16 +1,102 @@
-body {
+.container {
   font-family: Arial;
+}
+
+/* TITLE */
+.title {
+  font-size: 42px;
+  font-weight: bold;
   text-align: center;
-  background: #f2f2f2;
+  font-family: cursive;
 }
 
-input {
-  margin: 5px;
-  padding: 10px;
+/* TAGLINE */
+.tagline {
+  text-align: center;
+  font-style: italic;
+  color: #e91e63;
 }
 
-button {
+/* ADDRESS */
+.address {
+  text-align: center;
+  color: gray;
+}
+
+/* TABLE INFO */
+.table-info {
+  text-align: center;
+  background: #fff3e0;
   padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+/* BANNER */
+.banner {
+  width: 100%;
+  max-width: 750px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  margin: 20px auto;
+}
+
+/* BOOKING BOX */
+.booking-box {
+  text-align: center;
+  width: 320px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.booking-box input {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 8px;
+}
+
+.booking-box button {
+  margin-top: 10px;
+  padding: 10px 20px;
   background: green;
   color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* SCROLL MENU */
+.scroll-container {
+  overflow: hidden;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.scroll-track {
+  display: flex;
+  gap: 15px;
+  animation: scroll 20s linear infinite;
+}
+
+.dish-card {
+  min-width: 120px;
+  text-align: center;
+}
+
+.dish-card img {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* ANIMATION */
+@keyframes scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }

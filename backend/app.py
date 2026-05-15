@@ -1,32 +1,47 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from db import get_connection
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route("/health")
-def health():
-    return {"status": "Backend running"}
+@app.route("/api/reservations", methods=["GET"])
+def reservations():
 
-@app.route("/reserve", methods=["POST"])
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM reservations")
+
+    data = cursor.fetchall()
+
+    conn.close()
+
+    return jsonify(data)
+
+@app.route("/api/reserve", methods=["POST"])
 def reserve():
+
     data = request.json
+
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute(
         "INSERT INTO reservations (name, time, people) VALUES (%s,%s,%s)",
-        (data["name"], data["time"], data["people"])
+        (
+            data["name"],
+            data["time"],
+            data["people"]
+        )
     )
 
     conn.commit()
-    return {"message": "Success"}
+    conn.close()
 
-@app.route("/reservations")
-def get_all():
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    return jsonify({
+        "message": "Reservation Booked Successfully"
+    })
 
-    cursor.execute("SELECT * FROM reservations")
-    return jsonify(cursor.fetchall())
-
-app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

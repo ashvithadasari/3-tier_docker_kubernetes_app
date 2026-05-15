@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: dasariashvitha/resturant_frontend
+        image: dasariashvitha/restaurant-frontend:latest
         ports:
         - containerPort: 3000
 ---
@@ -23,7 +23,7 @@ kind: Service
 metadata:
   name: frontend-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: frontend
   ports:
