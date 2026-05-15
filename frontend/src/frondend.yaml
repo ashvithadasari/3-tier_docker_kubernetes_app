@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: yourdockerhub/ashu-frontend
+        image: dasariashvitha/resturant_frontend
         ports:
         - containerPort: 3000
 ---
