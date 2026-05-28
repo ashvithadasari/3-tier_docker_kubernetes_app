@@ -1,0 +1,10 @@
+# backend-configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+
+data:
+  DB_HOST: "mydb.cduquwyokvwf.ap-south-1.rds.amazonaws.com"
+  DB_NAME: "restaurant"
