@@ -1,150 +1,178 @@
+// App.jsx
+
 import React, { useEffect, useState } from "react";
-import "./style.css";
+import "./App.css";
 
-function App() {
-  const TOTAL_TABLES = 50;
+const foodItems = [
+  {
+    name: "Hyderabadi Biryani",
+    image:
+      "https://images.unsplash.com/photo-1701579231349-d7459c40919d?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Gongura Chicken",
+    image:
+      "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Pesarattu",
+    image:
+      "https://images.unsplash.com/photo-1630383249896-424e482df921?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Pulihora",
+    image:
+      "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Kodi Vepudu",
+    image:
+      "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Gutti Vankaya",
+    image:
+      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Ragi Sangati",
+    image:
+      "https://images.unsplash.com/photo-1516684732162-798a0062be99?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Royyala Iguru",
+    image:
+      "https://images.unsplash.com/photo-1563379091339-03246963d96c?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Ulavacharu",
+    image:
+      "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Bobbatlu",
+    image:
+      "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Pizza Margherita",
+    image:
+      "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Alfredo Pasta",
+    image:
+      "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Lasagna",
+    image:
+      "https://images.unsplash.com/photo-1619895092538-128341789043?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Bruschetta",
+    image:
+      "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Risotto",
+    image:
+      "https://images.unsplash.com/photo-1633436375795-12b3b339712f?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Ravioli",
+    image:
+      "https://images.unsplash.com/photo-1625944230945-1b7dd3b949ab?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Garlic Bread",
+    image:
+      "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Tiramisu",
+    image:
+      "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Gnocchi",
+    image:
+      "https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    name: "Spaghetti Carbonara",
+    image:
+      "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=1200&auto=format&fit=crop",
+  },
+];
 
-  const [data, setData] = useState([]);
+export default function App() {
+  const [bookedTables, setBookedTables] = useState(78);
+  const [currentTime, setCurrentTime] = useState("");
 
-  const [form, setForm] = useState({
-    name: "",
-    time: "",
-    people: "",
-    date: ""
-  });
-
-  const [message, setMessage] = useState("");
-
-  // ---------------- FETCH DATA ----------------
-  const fetchData = async () => {
-    try {
-      const res = await fetch("/api/reservations");
-      const result = await res.json();
-      setData(result);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const totalTables = 150;
 
   useEffect(() => {
-    fetchData();
+    const interval = setInterval(() => {
+      const now = new Date();
+      setCurrentTime(now.toLocaleString());
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  // ---------------- SUBMIT ----------------
-  const submit = async () => {
-    try {
-      const res = await fetch("/api/reserve", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
-      });
-
-      const result = await res.json();
-      setMessage(result.message);
-
-      fetchData();
-    } catch (err) {
-      setMessage("Booking failed");
+  const handleBooking = () => {
+    if (bookedTables < totalTables) {
+      setBookedTables(bookedTables + 1);
+      alert("Table booked successfully!");
     }
   };
 
-  // ---------------- CALCULATE AVAILABLE TABLES ----------------
-  const bookedTables = data.length;
-  const availableTables = TOTAL_TABLES - bookedTables;
-
   return (
-    <div className="container">
+    <div className="app">
+      {/* HEADER */}
+      <header className="header">
+        <h1>🍽️ Telugu Italiano Kitchen</h1>
+        <p>{currentTime}</p>
+      </header>
 
-      {/* TITLE */}
-      <h1 className="title">Ashu Restaurant 🍽️</h1>
+      {/* BOOKING SECTION */}
+      <div className="booking-container">
+        <input type="text" placeholder="Your Name" />
+        <input type="date" />
+        <input type="time" />
+        <input type="number" placeholder="Members" />
 
-      {/* TAGLINE */}
-      <h3 className="tagline">“Eat good, feel good”</h3>
-
-      {/* ADDRESS */}
-      <p className="address">
-        Opposite JNTU, Kukatpally, Hyderabad
-      </p>
+        <button
+          onClick={handleBooking}
+          disabled={bookedTables >= totalTables}
+        >
+          {bookedTables >= totalTables
+            ? "All Tables Booked"
+            : "Book Table"}
+        </button>
+      </div>
 
       {/* TABLE STATUS */}
-      <div className="table-info">
-        <h2>Total Tables: 50</h2>
-        <h3>Available Tables: {availableTables}</h3>
+      <div className="table-status">
+        <h2>
+          Tables Booked: {bookedTables} / {totalTables}
+        </h2>
+
+        <h3>Tables Available: {totalTables - bookedTables}</h3>
       </div>
 
-      {/* IMAGE */}
-      <img
-        className="banner"
-        src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4"
-        alt="restaurant"
-      />
-
-      {/* BOOKING */}
-      <div className="booking-box">
-        <h2>Reserve Your Table</h2>
-
-        <input
-          placeholder="Name"
-          onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
-          }
-        />
-
-        <input
-          type="date"
-          onChange={(e) =>
-            setForm({ ...form, date: e.target.value })
-          }
-        />
-
-        <input
-          placeholder="Time"
-          onChange={(e) =>
-            setForm({ ...form, time: e.target.value })
-          }
-        />
-
-        <input
-          placeholder="People"
-          onChange={(e) =>
-            setForm({ ...form, people: e.target.value })
-          }
-        />
-
-        <button onClick={submit}>Book Table</button>
-
-        <p>{message}</p>
-      </div>
-
-      {/* MENU SCROLL */}
-      <div className="scrolling-menu">
-        <marquee behavior="scroll" direction="left">
-          🍛 Biryani &nbsp;&nbsp; 🍕 Pizza &nbsp;&nbsp; 🍔 Burger &nbsp;&nbsp;
-          🍦 Ice Cream &nbsp;&nbsp; 🍝 Pasta &nbsp;&nbsp; 🥗 Salad &nbsp;&nbsp;
-          🍗 Chicken Fry &nbsp;&nbsp; 🥪 Sandwich &nbsp;&nbsp;
-          🍩 Donuts &nbsp;&nbsp; 🥤 Mocktails
-        </marquee>
-      </div>
-
-      {/* RESERVATIONS */}
-      <div className="reservations">
-        <h2>Reservations</h2>
-
-        {data.length === 0 ? (
-          <p>No reservations yet</p>
-        ) : (
-          data.map((r, i) => (
-            <div key={i} className="reservation-card">
-              <p><b>Name:</b> {r.name}</p>
-              <p><b>Date:</b> {r.date}</p>
-              <p><b>Time:</b> {r.time}</p>
-              <p><b>People:</b> {r.people}</p>
+      {/* FOOD CAROUSEL */}
+      <div className="carousel-wrapper">
+        <div className="carousel-track">
+          {[...foodItems, ...foodItems].map((food, index) => (
+            <div className="food-card" key={index}>
+              <img src={food.image} alt={food.name} />
+              <h4>{food.name}</h4>
             </div>
-          ))
-        )}
+          ))}
+        </div>
       </div>
     </div>
   );
 }
-
-export default App;
