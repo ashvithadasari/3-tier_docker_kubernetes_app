@@ -1,47 +1,107 @@
+# backend/app.py
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from db import get_connection
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/api/reservations", methods=["GET"])
-def reservations():
+TOTAL_TABLES = 150
 
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+# Temporary in-memory storage
+bookings = [
+    {
+        "id": 1,
+        "name": "Ashvitha",
+        "date": "2026-05-28",
+        "time": "08:00 PM",
+        "members": 4
+    }
+]
 
-    cursor.execute("SELECT * FROM reservations")
 
-    data = cursor.fetchall()
-
-    conn.close()
-
-    return jsonify(data)
-
-@app.route("/api/reserve", methods=["POST"])
-def reserve():
-
-    data = request.json
-
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute(
-        "INSERT INTO reservations (name, time, people) VALUES (%s,%s,%s)",
-        (
-            data["name"],
-            data["time"],
-            data["people"]
-        )
-    )
-
-    conn.commit()
-    conn.close()
-
+# HOME ROUTE
+@app.route("/")
+def home():
     return jsonify({
-        "message": "Reservation Booked Successfully"
+        "message": "Restaurant Booking API Running"
     })
 
+
+# GET BOOKING COUNT
+@app.route("/api/bookings/count", methods=["GET"])
+def get_booking_count():
+    return jsonify({
+        "bookedTables": len(bookings),
+        "totalTables": TOTAL_TABLES,
+        "availableTables": TOTAL_TABLES - len(bookings)
+    })
+
+
+# GET ALL BOOKINGS
+@app.route("/api/bookings", methods=["GET"])
+def get_bookings():
+    return jsonify(bookings)
+
+
+# CREATE BOOKING
+@app.route("/api/bookings", methods=["POST"])
+def create_booking():
+
+    data = request.get_json()
+
+    name = data.get("name")
+    date = data.get("date")
+    time = data.get("time")
+    members = data.get("members")
+
+    # VALIDATION
+    if not name or not date or not time or not members:
+        return jsonify({
+            "message": "All fields are required"
+        }), 400
+
+    # CHECK TABLE LIMIT
+    if len(bookings) >= TOTAL_TABLES:
+        return jsonify({
+            "message": "All tables are booked"
+        }), 400
+
+    new_booking = {
+        "id": len(bookings) + 1,
+        "name": name,
+        "date": date,
+        "time": time,
+        "members": members
+    }
+
+    bookings.append(new_booking)
+
+    return jsonify({
+        "message": "Booking successful",
+        "booking": new_booking
+    }), 201
+
+
+# DELETE BOOKING
+@app.route("/api/bookings/<int:booking_id>", methods=["DELETE"])
+def delete_booking(booking_id):
+
+    global bookings
+
+    bookings = [
+        booking for booking in bookings
+        if booking["id"] != booking_id
+    ]
+
+    return jsonify({
+        "message": "Booking deleted successfully"
+    })
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )
