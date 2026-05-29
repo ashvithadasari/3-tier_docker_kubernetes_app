@@ -56,15 +56,29 @@ def create_booking():
     members = data.get("members")
 
     # VALIDATION
-    if not name or not date or not time or not members:
+    if not name or not date or not time or members is None:
         return jsonify({
             "message": "All fields are required"
         }), 400
-
+    if int(members) <= 0:
+    return jsonify({
+        "message": "Members must be greater than 0"
+    }), 400
+    
     # CHECK TABLE LIMIT
     if len(bookings) >= TOTAL_TABLES:
         return jsonify({
             "message": "All tables are booked"
+        }), 400
+    # CHECK DUPLICATE BOOKING
+    for booking in bookings:
+         if (
+            booking["name"] == name and
+            booking["date"] == date and
+            booking["time"] == time
+        ):
+    return jsonify({
+            "message": "You already booked this slot"
         }), 400
 
     new_booking = {
@@ -88,6 +102,16 @@ def create_booking():
 def delete_booking(booking_id):
 
     global bookings
+
+    booking_exists = any(
+        booking["id"] == booking_id
+        for booking in bookings
+    )
+
+    if not booking_exists:
+        return jsonify({
+            "message": "Booking not found"
+        }), 404
 
     bookings = [
         booking for booking in bookings
