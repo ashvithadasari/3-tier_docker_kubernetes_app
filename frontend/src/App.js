@@ -1,7 +1,7 @@
 // App.jsx
 
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import "./style.css";
 
 const foodItems = [
   {
@@ -108,7 +108,12 @@ const foodItems = [
 
 export default function App() {
   const [bookedTables, setBookedTables] = useState(78);
-  const [currentTime, setCurrentTime] = useState("");
+const [currentTime, setCurrentTime] = useState("");
+
+const [name, setName] = useState("");
+const [members, setMembers] = useState("");
+const [date, setDate] = useState("");
+const [time, setTime] = useState("");
 
   const totalTables = 150;
 
@@ -121,12 +126,25 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleBooking = () => {
-    if (bookedTables < totalTables) {
-      setBookedTables(bookedTables + 1);
-      alert("Table booked successfully!");
-    }
-  };
+const handleBooking = () => {
+  if (!name || !date || !time || !members) {
+    alert("Please fill all details");
+    return;
+  }
+
+  if (bookedTables < totalTables) {
+    setBookedTables((prev) => prev + 1);
+
+    alert(
+      `Table booked for ${name} on ${date} at ${time}`
+    );
+
+    setName("");
+    setDate("");
+    setTime("");
+    setMembers("");
+  }
+};
 
   return (
     <div className="app">
@@ -138,11 +156,28 @@ export default function App() {
 
       {/* BOOKING SECTION */}
       <div className="booking-container">
-        <input type="text" placeholder="Your Name" />
-        <input type="date" />
-        <input type="time" />
-        <input type="number" placeholder="Members" />
-
+        <input
+  type="text"
+  placeholder="Your Name"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+/>
+        <input
+  type="date"
+  value={date}
+  onChange={(e) => setDate(e.target.value)}
+/>
+        <input
+  type="time"
+  value={time}
+  onChange={(e) => setTime(e.target.value)}
+/>
+        <input
+  type="number"
+  placeholder="Members"
+  value={members}
+  onChange={(e) => setMembers(e.target.value)}
+/>
         <button
           onClick={handleBooking}
           disabled={bookedTables >= totalTables}
