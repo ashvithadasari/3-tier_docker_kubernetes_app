@@ -1,5 +1,3 @@
-# backend/app.py
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -31,6 +29,7 @@ def home():
 # GET BOOKING COUNT
 @app.route("/api/bookings/count", methods=["GET"])
 def get_booking_count():
+
     return jsonify({
         "bookedTables": len(bookings),
         "totalTables": TOTAL_TABLES,
@@ -41,6 +40,7 @@ def get_booking_count():
 # GET ALL BOOKINGS
 @app.route("/api/bookings", methods=["GET"])
 def get_bookings():
+
     return jsonify(bookings)
 
 
@@ -60,27 +60,40 @@ def create_booking():
         return jsonify({
             "message": "All fields are required"
         }), 400
-    if int(members) <= 0:
-    return jsonify({
-        "message": "Members must be greater than 0"
-    }), 400
-    
+
+    try:
+        members = int(members)
+
+        if members <= 0:
+            return jsonify({
+                "message": "Members must be greater than 0"
+            }), 400
+
+    except ValueError:
+        return jsonify({
+            "message": "Members must be a number"
+        }), 400
+
     # CHECK TABLE LIMIT
     if len(bookings) >= TOTAL_TABLES:
         return jsonify({
             "message": "All tables are booked"
         }), 400
+
     # CHECK DUPLICATE BOOKING
     for booking in bookings:
-         if (
+
+        if (
             booking["name"] == name and
             booking["date"] == date and
             booking["time"] == time
         ):
-    return jsonify({
-            "message": "You already booked this slot"
-        }), 400
 
+            return jsonify({
+                "message": "You already booked this slot"
+            }), 400
+
+    # CREATE NEW BOOKING
     new_booking = {
         "id": len(bookings) + 1,
         "name": name,
@@ -124,6 +137,7 @@ def delete_booking(booking_id):
 
 
 if __name__ == "__main__":
+
     app.run(
         host="0.0.0.0",
         port=5000,

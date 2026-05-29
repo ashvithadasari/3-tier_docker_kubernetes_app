@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: backend
 
@@ -17,40 +18,38 @@ spec:
 
     spec:
       containers:
-      - name: backend
+        - name: backend
+          image: dasariashvitha/backend-app:v1
 
-        image: dasariashvitha/restaurant-backend:latest
+          ports:
+            - containerPort: 5000
 
-        ports:
-        - containerPort: 5000
+          env:
+            # CONFIGMAP VALUES
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_HOST
 
-        env:
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_NAME
 
-        # CONFIGMAP VALUES
-        - name: DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: backend-config
-              key: DB_HOST
+            # SECRET VALUES
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: DB_USER
 
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: backend-config
-              key: DB_NAME
-
-        # SECRET VALUES
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: backend-secret
-              key: DB_USER
-
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: backend-secret
-              key: DB_PASSWORD
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: DB_PASSWORD
 
 ---
 apiVersion: v1
@@ -66,5 +65,5 @@ spec:
     app: backend
 
   ports:
-  - port: 5000
-    targetPort: 5000
+    - port: 5000
+      targetPort: 5000
