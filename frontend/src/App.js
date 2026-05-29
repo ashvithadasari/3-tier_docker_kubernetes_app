@@ -12,47 +12,37 @@ const foodItems = [
   {
     name: "Gongura Chicken",
     image:
-      "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    name: "Pesarattu",
-    image:
-      "https://images.unsplash.com/photo-1630383249896-424e482df921?q=80&w=1200&auto=format&fit=crop",
+      "https://www.indianrecipeinfo.com/wp-content/uploads/2021/06/Gongura-Chicken.jpg",
   },
   {
     name: "Pulihora",
     image:
-      "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=1200&auto=format&fit=crop",
+      "https://th.bing.com/th/id/OIP.hy20fKqP8kR_GysRfIniWQHaE7",
   },
   {
     name: "Kodi Vepudu",
     image:
-      "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=1200&auto=format&fit=crop",
+      "https://th.bing.com/th/id/OIP.fKL1ly_iFTtvh-gzxOL3mwHaFU",
   },
   {
     name: "Gutti Vankaya",
     image:
-      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop",
+      "https://th.bing.com/th/id/OIP.Jau5-qzSDgwkiCvR4jOfEgHaEK",
   },
   {
     name: "Ragi Sangati",
     image:
-      "https://images.unsplash.com/photo-1516684732162-798a0062be99?q=80&w=1200&auto=format&fit=crop",
+      "https://th.bing.com/th/id/OIP.UmGtro7R3Hz-kwmkayK3-AHaE8",
   },
   {
     name: "Royyala Iguru",
     image:
-      "https://images.unsplash.com/photo-1563379091339-03246963d96c?q=80&w=1200&auto=format&fit=crop",
+      "https://th.bing.com/th/id/OIP.ZHpI91qW86CEpKirD6Dn2wHaFh",
   },
   {
     name: "Ulavacharu",
     image:
-      "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    name: "Bobbatlu",
-    image:
-      "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=1200&auto=format&fit=crop",
+      "https://th.bing.com/th/id/OIP.POLObaU6vQKIfXiIEMPV8gHaFL",
   },
   {
     name: "Pizza Margherita",
@@ -150,7 +140,7 @@ const handleBooking = () => {
     <div className="app">
       {/* HEADER */}
       <header className="header">
-        <h1>🍽️ Telugu Italiano Kitchen</h1>
+        <h1>🍽️ Ashu's Kitchen</h1>
         <p>{currentTime}</p>
       </header>
 
@@ -202,7 +192,16 @@ const handleBooking = () => {
         <div className="carousel-track">
           {[...foodItems, ...foodItems].map((food, index) => (
             <div className="food-card" key={index}>
-              <img src={food.image} alt={food.name} />
+              <img
+                src={food.image}
+                alt={food.name}
+                style={{
+                  width: "100%",
+                  height: "220px",
+                  objectFit: "cover",
+                  borderRadius: "12px",
+                }}
+              />
               <h4>{food.name}</h4>
             </div>
           ))}
