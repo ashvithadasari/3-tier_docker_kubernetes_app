@@ -97,7 +97,7 @@ const foodItems = [
 ];
 
 export default function App() {
-  const [bookedTables, setBookedTables] = useState(78);
+  const [bookedTables, setBookedTables] = useState(0);
 const [currentTime, setCurrentTime] = useState("");
 
 const [name, setName] = useState("");
@@ -116,24 +116,49 @@ const [time, setTime] = useState("");
     return () => clearInterval(interval);
   }, []);
 
-const handleBooking = () => {
+const handleBooking = async () => {
   if (!name || !date || !time || !members) {
     alert("Please fill all details");
     return;
   }
 
-  if (bookedTables < totalTables) {
-    setBookedTables((prev) => prev + 1);
-
-    alert(
-      `Table booked for ${name} on ${date} at ${time}`
+  try {
+    const response = await fetch(
+      "http://mydb.cduquwyokvwf.ap-south-1.rds.amazonaws.com/api/bookings",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          date,
+          time,
+          members,
+        }),
+      }
     );
 
-    setName("");
-    setDate("");
-    setTime("");
-    setMembers("");
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message);
+
+      setBookedTables((prev) => prev + 1);
+
+      setName("");
+      setDate("");
+      setTime("");
+      setMembers("");
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error(error);
+
+    alert("Backend connection failed");
   }
+
 };
 
   return (
